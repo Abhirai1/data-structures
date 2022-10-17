@@ -1,0 +1,123 @@
+#include <stdlib.h>
+#include <conio.h>
+#include <stdio.h>
+
+struct node{
+    int info;
+    struct node *next;
+};
+
+typedef struct node NODE;
+
+NODE * insert_beg(NODE *start,int a){
+    NODE *newnode = (NODE *)malloc(sizeof(NODE));
+    newnode->info = a;
+    newnode->next = start;
+    start = newnode;
+    return start;
+}
+
+NODE * insert_end(NODE *start,int a){
+    NODE *curr = start;
+    NODE *newnode = (NODE *)malloc(sizeof(NODE));
+    newnode->info = a;
+    newnode->next = NULL;
+    while(curr->next != NULL){
+        curr = curr->next;
+    }
+    curr->next = newnode;
+    return start;
+}
+
+NODE * del_beg(NODE *start){
+    NODE *curr = start;
+    start = start->next;
+    free(curr);
+    return start;
+}
+
+NODE * del_end(NODE *start){
+    NODE *curr = start;
+    NODE *temp;
+    while((curr->next)->next != NULL){
+        curr = curr->next;
+    }
+    temp = curr->next;
+    curr->next = NULL;
+    free(temp);
+    return(start);
+}
+
+NODE * reverse(NODE *start){
+    NODE *first = start;
+    NODE *second = start->next;
+    NODE *third = start->next;
+    
+    while(third->next != NULL){
+        third = (third->next);
+        // second = first->next;
+        // third = second->next;
+        second->next = first;
+        first = second;
+        second = third;
+    }
+    
+    start->next = NULL;
+    third->next = second;
+    start = third;
+    return start;
+}
+
+void traversal(NODE *start){
+    NODE *curr = start;
+    while(curr->next != NULL){
+        printf("%d ",curr->info);
+        curr = curr->next;
+    }
+    printf("%d\n",curr->info);
+}
+
+NODE * create(NODE *start){
+    int a;
+    NODE *curr = start;
+    NODE *newnode = (NODE *)malloc(sizeof(NODE));
+    printf("\nEnter the element: ");
+    scanf("%d",&a);
+    newnode->info = a;
+    if(start == NULL){
+        start = newnode;
+        start->next = NULL;
+    }
+    else{
+        while(curr->next != NULL){
+            curr = curr->next;
+        }
+        curr->next = newnode;
+        newnode->next = NULL;
+    }
+    return start;
+}
+
+int main()
+{
+    NODE *start = NULL;
+    int n;
+    printf("Enter the no.of element u want in the list: ");
+    scanf("%d",&n);
+    while(n--){
+        start = create(start);
+    }
+    traversal(start);
+    printf("\nEnter the element u want to insert: ");
+    int a;
+    scanf("%d",&a);
+    start = insert_beg(start,a);
+    start = insert_end(start,a);
+    traversal(start);
+    start = del_beg(start);
+    start = del_end(start);
+    start = reverse(start);
+    traversal(start);
+
+    return 0;
+}
